@@ -1,0 +1,27 @@
+{
+    "lunarlander": {
+        "default": [-300, -200, -100, 0, 100, 200, 300],
+        "min": -300,
+        "max": 300
+    },
+    "hungrythirsty": {
+        "default": [0, 1, 19, 49, 200],
+        "min": 0,
+        "max": 100
+    },
+    "reacher": {
+        "default": [-100, -40, -25, -10, 0],
+        "min": -100,
+        "max": 0
+    },
+    "inverteddoublependulum": {
+        "default": [0, 100, 500, 1000, 10000],
+        "min": 0,
+        "max": 10000
+    },
+    "halfcheetah": {
+        "default": [-500, -250, 0, 250, 700, 3000, 6000],
+        "min": -500,
+        "max": 6000
+    }
+}
