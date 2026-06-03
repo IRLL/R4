@@ -63,7 +63,8 @@ class NNOptimization:
 
         if loss_func == "ranking_mse":
             self.loss_func = lambda pred, gt: ranking_mse(
-                pred, gt, regularization_strength=self.args.rmse_regularization_strength
+                # check if args has rmse_regularization_strength attribute, if not set it to 1.0
+                pred, gt, regularization_strength=getattr(self.args, "rmse_regularization_strength", 1.0)
             )
         elif loss_func == "ranking_mse_ot":
             self.loss_func = ranking_mse_ot
