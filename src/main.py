@@ -11,12 +11,14 @@ import numpy as np
 import torch
 
 from optimization import NNOptimization
+from rewardFunctions.reward_functions import RewardFunctionSimple, get_reward_functionNN
+from testing.sac_test import SAC_Test
 from utils import create_model, read_bin_data, read_env_config, read_pickle, write_pickle
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", type=str, default="mini", help="The model to be optimized")
-parser.add_argument("--num_generations", type=int, default=200, help="Number of optimization iterations")
+parser.add_argument("--num_generations", type=int, default=1500, help="Number of optimization iterations")
 parser.add_argument("--batch_size", type=int, default=64, help="Batch size for optimization")
 parser.add_argument(
     "--loss_func",
@@ -38,6 +40,9 @@ parser.add_argument("--noisy_bins", type=bool, default=False, help="Use noisy bi
 parser.add_argument("--noise_factor", type=float, default=0.1, help="Noise factor for noisy bins")
 parser.add_argument("--human_data", type=bool, default=False, help="Use human labeled data")
 parser.add_argument("--rmse_regularization_strength", type=float, default=1.0, help="Regularization strength for ranking mse loss")
+parser.add_argument("--test_type", type=str, default="q_test", help="q_test, dq_test, sac_test, or none")
+parser.add_argument("--test_seeds", type=int, nargs="+", default=[1, 2], help="Seeds to use for tests")
+parser.add_argument("--num_test_episodes", type=int, default=5000, help="Number of test episodes")
 args = parser.parse_args()
 
 state_action = []
@@ -263,3 +268,27 @@ config = {
     "rmse_regularization_strength": args.rmse_regularization_strength,
 }
 write_pickle(f"{checkpoint_dir}/{run_guid}_{solution_fitness}_config.pkl", config)
+
+if args.test_type != "none":
+    reward_fn = get_reward_functionNN(model, args.env_name)
+
+    if args.env_name == "hungrythirsty":
+        def fitness_fn(state, action, new_state):
+            return int(new_state["hungry"] is False)
+    else:
+        fitness_fn = None
+    
+    sac_test = SAC_Test(
+        reward_fn,
+        fitness_fn,
+        env_seeds_to_test=args.test_seeds,
+        num_episodes=args.num_test_episodes,
+        learning_start=100,
+        record_freq=10,
+        learning_performance_dir=checkpoint_dir,
+        run_guid=run_guid,
+        try_num=0,
+        env_name=env_config["env_name"],
+        config=config,
+    )
+    sac_test.test()
