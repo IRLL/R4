@@ -18,6 +18,25 @@ Reward design remains a significant bottleneck in applying reinforcement learnin
 
 ## Setup
 
+Create a Python 3.8.20 virtual environment from the repo root and install the project dependencies:
+
+```bash
+python3.8 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r src/requirements.txt
+```
+
+Install `fast_soft_sort` in editable mode:
+
+```bash
+git clone https://github.com/google-research/fast-soft-sort.git
+cd fast-soft-sort
+pip install -e .
+```
+
+Return to this repository before running the offline or online entry points.
+
 
 ## Offline reward learning (rMSE)
 
@@ -47,8 +66,19 @@ Common options:
 
 Artifacts are saved under ../checkpoints/online by default.
 
+## Human Data
+
+Data collected in our human study is available at [this link](https://drive.google.com/drive/folders/1kSoj8-OARPYaOCjqwNeCMZbCN75tiXKR?usp=sharing).
+
 ## Citation
 
 If you use this code, please cite the paper:
 
-- Chaitanya Kharyal, Calarina Muslimani, Matthew E. Taylor. "Reward Learning through Ranking Mean Squared Error." ICML 2026.
+```
+@inproceedings{kharyal2026rmse,
+  title     = {Reward Learning through Ranking Mean Squared Error},
+  author = {Kharyal, Chaitanya and Muslimani, Calarina and Taylor, Matthew E.}
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2026},
+}
+```
