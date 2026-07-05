@@ -70,6 +70,18 @@ Artifacts are saved under ../checkpoints/online by default.
 
 Data collected in our human study is available at [this link](https://drive.google.com/drive/folders/1kSoj8-OARPYaOCjqwNeCMZbCN75tiXKR?usp=sharing).
 
+### Dataset Overview
+
+We release the dataset of human ratings collected in the Reacher and Hopper environments to aid future research on reward learning from human rated feedback, particularly in settings involving noisy, subjective, and heterogeneous human supervision. Apart from the details already provided in previous sections, this section describes the dataset structure and usage.
+
+Rating Scale and Heterogeneity: Ratings are absolute, discrete evaluations assigned independently by each annotator. As described in Section B.2, users were allowed to (1) choose their own rating scale, (2) extend the scale if they encountered behavior outside their chosen range, and (3) skip trajectories when uncertain. As a result, rating scales are annotator-specific and not globally normalized. The released dataset preserves all raw ratings without aggregation or rescaling. This design allows researchers to explicitly account for inter-rater variability, inconsistency, and noise, and to develop algorithms better suited to handling these challenges.
+
+Dataset Statistics: For each environment and each rater, the dataset contains (1) a set of trajectories, (2) rating labels corresponding to each trajectory, and (3) the undiscounted environment returns associated with each trajectory. For Reacher, users employed an average of 6.22 rating classes, with a standard deviation of 2.30. Similarly, for Hopper, users employed an average of 6.57 rating classes, with a standard deviation of 2.26. The environment returns of the collected trajectories also exhibit substantial variability: for Reacher, average environment returns are −13.27 ± 9.02, ranging from −45.03 to −2.86, while for Hopper, average environment returns are 500.54 ± 239.97, ranging from 5.67 to 825.51.
+
+File Structure: The ratings for each environment are stored in the corresponding folder named <Env name> Human. Each folder contains three pickle files per user: `pX labels.pkl`, `pX returns.pkl`, and `pX state action pairs.pkl`, where `X` denotes the user ID. The file `pX state action pairs.pkl` contains the trajectories shown to the user, while `pX labels.pkl` and `pX returns.pkl` contain the corresponding user-provided ratings and undiscounted environment returns, respectively.
+
+Intended Use and Limitations: The dataset is intended for research on reward learning from human provided ratings, and robustness to noisy human supervision. Because ratings are subjective and use annotator-specific scales, direct comparison of raw rating values across annotators may be inappropriate without normalization or modeling assumptions. If using this provided dataset, researchers should account for this heterogeneity when designing learning algorithms or evaluation procedures.
+
 ## Citation
 
 If you use this code, please cite the paper:
